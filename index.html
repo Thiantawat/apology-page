@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ข้อความแอนิเมชันขอโทษเบ้บ</title>
+    <style>
+        body {
+            margin: 0px;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            overflow: hidden;
+            background-color: #fce4ec; /* สีพื้นหลังชมพูอ่อน */
+            position: relative;
+            min-height: 100vh;
+        }
+
+        #container {
+            color: #666;
+            text-transform: uppercase;
+            font-size: 36px;
+            font-weight: bold;
+            padding-top: 200px;
+            position: fixed;
+            width: 100%;
+            bottom: 45%;
+            display: block;
+            z-index: 10;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #flip {
+            height: 50px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #flip > div > div {
+            color: #fff;
+            padding: 4px 12px;
+            height: 45px;
+            margin-bottom: 45px;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        #flip div:first-child {
+            /* ปรับระยะเวลาเป็น 8s (หาร 4 ได้ง่าย) */
+            animation: show 8s linear infinite; 
+        }
+
+        /* --- กำหนดสีของแต่ละช่อง --- */
+        #flip div:nth-child(1) div {
+            background: #ff6347; /* สีแดงส้ม (ที่สุดในโลก) */
+        }
+        #flip div:nth-child(2) div {
+            background: #ff7f50; /* สีส้มคอรัล (เบ้บ) */
+        }
+        #flip div:nth-child(3) div {
+            background: #ff1493; /* สีชมพูเข้ม (รัก) */
+        }
+        #flip div:nth-child(4) div {
+            background: #f118b0; /* สีทอง (มาก) - **สีสำหรับช่องใหม่** */
+        }
+
+
+        /* * KEYFRAMES ที่ปรับสำหรับ 4 รายการ (เลื่อนทีละ 90px)
+         * -270px (รายการ 1: ที่สุดในโลก)
+         * -180px (รายการ 2: เบ้บ)
+         * -90px (รายการ 3: รัก)
+         * 0px    (รายการ 4: มาก)
+         */
+        @keyframes show {
+            /* 0% - 24.99% แสดงรายการที่ 1 (-270px) */
+            0% {margin-top:-270px;}
+            20% {margin-top:-270px;} 
+
+            /* 25% - 49.99% แสดงรายการที่ 2 (-180px) */
+            25% {margin-top:-180px;}
+            45% {margin-top:-180px;} 
+
+            /* 50% - 74.99% แสดงรายการที่ 3 (-90px) */
+            50% {margin-top:-90px;}
+            70% {margin-top:-90px;} 
+            
+            /* 75% - 99.99% แสดงรายการที่ 4 (0px) */
+            75% {margin-top:0px;}
+            99.99% {margin-top:0px;}
+            
+            /* 100% วนกลับไปรายการที่ 1 */
+            100% {margin-top:-270px;}
+        }
+
+        p {
+            position: fixed;
+            width: 100%;
+            bottom: 30px;
+            font-size: 12px;
+            color: #999;
+            margin-top: 200px;
+            z-index: 10;
+        }
+
+        /* ---------------------------------- */
+        /* สไตล์สำหรับแอนิเมชันหัวใจ (ไม่เปลี่ยนแปลง) */
+        /* ---------------------------------- */
+        .heart-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            background-color: #ffb6c1;
+            transform: rotate(-45deg);
+            animation: float-up 10s linear forwards;
+            opacity: 0;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 50%;
+            top: 0;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(-45deg) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) rotate(-45deg) scale(0.5);
+            }
+            100% {
+                transform: translateY(-20vh) rotate(-45deg) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container" id="heartContainer"></div>
+
+    <div id="container">
+        <div id="flip">
+            <div><div>ที่สุดในโลก</div></div>
+            <div><div>มากกก</div></div>
+            <div><div>พี่รักเบ้บ</div></div>
+            <div><div>ขอโทษนะงับ</div></div> </div>
+    </div>
+
+    <script>
+        // JavaScript สำหรับการสร้างหัวใจและแอนิเมชัน (ไม่เปลี่ยนแปลง)
+        const heartContainer = document.getElementById('heartContainer');
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            const size = Math.random() * 20 + 10;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+
+            heart.style.left = `${Math.random() * 100}vw`;
+            
+            heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            
+            heart.style.animationDelay = `-${Math.random() * 5}s`;
+
+            heartContainer.appendChild(heart);
+
+            heart.addEventListener('animationend', () => {
+                heart.remove();
+            });
+        }
+
+        setInterval(createHeart, 300);
+        
+        for(let i = 0; i < 20; i++) {
+            createHeart();
+        }
+    </script>
+</body>
+</html>
